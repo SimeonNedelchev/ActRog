@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://ufnqcpjcpddg"]
+
+[ext_resource type="PackedScene" uid="uid://cg6g2mvg260d0" path="res://Scenes/tile_map.tscn" id="1_salkk"]
+[ext_resource type="PackedScene" uid="uid://bjh127o6m7ikh" path="res://Player/Player.tscn" id="2_pc76m"]
+[ext_resource type="PackedScene" uid="uid://bwjpwp8bim1lw" path="res://Scenes/Axolot.tscn" id="3_06hao"]
+[ext_resource type="Script" path="res://Scripts/Ivy.gd" id="4_gk31j"]
+[ext_resource type="Texture2D" uid="uid://g7nu54118pcp" path="res://Ivy_Leaf.png" id="4_pfti2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4nlb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6xeyw"]
+radius = 10.0499
+
+[node name="World" type="Node2D"]
+
+[node name="TileMap" parent="." instance=ExtResource("1_salkk")]
+
+[node name="Player" type="Node2D" parent="."]
+
+[node name="Player" parent="Player" instance=ExtResource("2_pc76m")]
+position = Vector2(363, 107)
+collision_mask = 5
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Axolot" parent="Enemies" instance=ExtResource("3_06hao")]
+position = Vector2(613, 189)
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="Ivy" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("4_gk31j")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ivy"]
+position = Vector2(419, 111)
+scale = Vector2(0.53125, 0.53125)
+texture = ExtResource("4_pfti2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ivy"]
+position = Vector2(420, 111)
+shape = SubResource("RectangleShape2D_g4nlb")
+
+[node name="Area2D" type="Area2D" parent="Ivy"]
+position = Vector2(419, 111)
+collision_layer = 5
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ivy/Area2D"]
+shape = SubResource("CircleShape2D_6xeyw")
+
+[connection signal="body_entered" from="Ivy/Area2D" to="Ivy" method="_on_area_2d_body_entered"]
